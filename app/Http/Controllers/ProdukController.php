@@ -57,34 +57,40 @@ class ProdukController extends Controller
     }
     public function store(Request $request)
     {
-        // Validasi data
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|numeric',
-            'benefits' => 'required|array',
-            'benefits.*' => 'string|max:255',
-            'image' => 'required|string', // Gambar harus berupa string base64
+            'benefits' => 'required|string', 
+            'image' => 'required|file|image', 
         ]);
 
-        // Mengambil data gambar base64 dari request
-        $imageData = $validated['image']; // data gambar dalam base64
+        $benefits = json_decode($validated['benefits']); 
 
-        // Data produk yang akan dikirim ke API eksternal
+        $imagePath = $request->file('image')->store('images', 'public'); 
+        $imageUrl = asset('storage/' . $imagePath); 
+
         $data = [
             'name' => $validated['name'],
             'price' => $validated['price'],
-            'benefits' => json_encode($validated['benefits']),
-            'image' => $imageData, // Kirim base64 image
+            'benefits' => $benefits, 
+            'image' => $imageUrl, 
         ];
 
-        // Mengirim data ke API eksternal
         $response = Http::post('https://loops-rotator.vercel.app/packages', $data);
 
-        // Menangani respons dari API
         if ($response->successful()) {
+            // Jika respons sukses, kirimkan respons sukses
             return response()->json(['success' => true, 'message' => 'Produk berhasil ditambahkan ke API eksternal']);
         } else {
-            return response()->json(['success' => false, 'message' => 'Gagal mengirim data ke API eksternal']);
+            // Jika ada kesalahan, log kesalahan dan kirimkan respons error
+            \Log::error('API Error', ['status' => $response->status(), 'body' => $response->body()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengirim data ke API eksternal',
+                'error' => $response->body() // Mengirimkan detail respons error
+            ]);
         }
     }
+
+
 }

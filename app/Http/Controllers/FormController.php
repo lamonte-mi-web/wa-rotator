@@ -26,7 +26,8 @@ class FormController extends Controller
     
             $campaignDetail = $campaignData['campaign'] ?? [];
             $campaignType = $campaignDetail['campaignType'] ?? 'cta_form'; 
-            $metaPixel = $campaignDetail['metaPixel'] ?? ''; 
+            $metaPixel = $campaignDetail['metaPixel']; 
+            $pixelTrack = $campaignDetail['pixelTrack']; 
     
             return view('campaign-form', [
                 'campaignName' => $campaignName,
@@ -36,6 +37,7 @@ class FormController extends Controller
                 'campaignDetail' => $campaignDetail,
                 'campaignType' => $campaignType,
                 'metaPixel' => $metaPixel, 
+                'pixelTrack' => $pixelTrack,
             ]);
         } catch (\Exception $e) {
             \Log::error('API Error: ' . $e->getMessage());

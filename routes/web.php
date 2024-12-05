@@ -25,7 +25,7 @@ Route::middleware(['guest'])->group(function(){
 
 
 Route::middleware(['auth'])->group(function(){
-    
+    Route::get('/',[HomeController::class,'index']);
     Route::get('/logout',[HomeController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
     Route::get('/campaign-payment', [HomeController::class, 'campaignPayment'])->name('campaign-payment');

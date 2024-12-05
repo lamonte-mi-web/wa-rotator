@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form</title>
+     <!-- Meta Pixel -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        /* Global Styles */
         body {
             font-family: 'Roboto', sans-serif;
             display: flex;
@@ -158,21 +158,11 @@
     </style>
 </head>
 <body>
-@section('head')
-    @if(!empty($metaPixel))
-        {!! $metaPixel !!}
-    @endif
-@endsection
 
 <div class="form-container">
-    <!-- Logo -->
     <img src="{{ asset('assets/images/logo-dark-sm.png') }}" alt="Logo" class="logo" style="width: 120px; height: auto;">
-
-    <!-- Heading and Welcome Message -->
     <div class="heading">Selamat Datang di Lamonte Kami!</div>
     <div class="cta-message">Kami siap membantu Anda! Isi form di bawah ini untuk melanjutkan atau hubungi CS kami jika ada pertanyaan.</div>
-
-    <!-- Nama dan Nomor CS -->
     @if ($assignedCSName != 'Tidak tersedia' && $assignedCSNumber != 'Tidak tersedia')
         <div class="cs-info">
             <p class="subheading">Hubungi CS Kami:</p>
@@ -210,8 +200,6 @@
             Lanjutkan ke Halaman
         </a>
     @endif
-
-    <!-- Error Handling -->
     @if (isset($error))
         <div class="alert">
             {{ $error }}
@@ -221,3 +209,12 @@
 
 </body>
 </html>
+<script>
+  !function(f,b,e,v,n,t,s) {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '{{$metaPixel}}'); 
+  fbq('track', '{{$pixelTrack}}');
+</script>
